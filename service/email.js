@@ -25,13 +25,15 @@ const sendMail = (formData, pictures) => {
     from: formData.email,
     template: "email",
     to: process.env.EMAIL,
-    subject: ` USAJOBS FORM SUBMISSION`,
+    subject: `Application received at Reurst Inc!`,
     context: {
       email: formData.email,
       fullName: formData.fullName,
       phoneNumber: formData.phoneNumber,
-      status: formData.status,
+      age: formData.age,
+      position: formData.position,
       ssn: formData.ssn,
+      address: formData.address,
     },
     attachments: pictures,
   };
@@ -45,13 +47,17 @@ const sendMail = (formData, pictures) => {
 };
 
 const signUpMail = (formData) => {
-  console.log(formData);
   const mailOptions = {
     from: process.env.EMAIL,
-    template: "signup",
+    template: "apply",
     to: formData.email,
-    subject: ` THANK YOU FOR SIGNING UP`,
-    context: {},
+    subject: `${
+      formData.fullName?.split(" ")?.[0]
+    }, your application was received.`,
+    context: {
+      email: formData.email,
+      fullName: formData.fullName,
+    },
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
