@@ -39,6 +39,14 @@ app.post(
   }
 );
 
+app.get("/wake-server", (req, res) => {
+  try {
+    return res.status(200).json({ message: "E don wake ooo" });
+  } catch (error) {
+    return res.status(500).json({ error: "Error waking up" });
+  }
+});
+
 app.post(
   "/complete",
   upload.fields([
