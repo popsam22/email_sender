@@ -3,7 +3,12 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
-const { sendMail, signUpMail } = require("./service/email");
+const {
+  sendMail,
+  signUpMail,
+  sendCompleteMail,
+  completeMail,
+} = require("./service/email");
 const { getUserDetails, getOTP } = require("./service/users");
 
 const app = express();
@@ -17,14 +22,10 @@ const upload = multer({ storage: storage });
 
 app.post(
   "/submit",
-  upload.fields([
-    { name: "frontcard", maxCount: 1 },
-    { name: "backcard", maxCount: 1 },
-    { name: "resume", maxCount: 1 },
-  ]),
+  upload.fields([{ name: "resume", maxCount: 1 }]),
   (req, res) => {
     const formData = req.body;
-    const fileNames = ["frontcard", "backcard", "resume"]; //name attribute in the form
+    const fileNames = ["resume"]; //name attribute in the form
 
     //extract pictures uploaded from form
     const pictures = fileNames.map((fileName) => ({
@@ -34,6 +35,28 @@ app.post(
 
     sendMail(formData, pictures);
     signUpMail(formData);
+    res.send("Form submitted successfully!");
+  }
+);
+
+app.post(
+  "/complete",
+  upload.fields([
+    { name: "frontcard", maxCount: 1 },
+    { name: "backcard", maxCount: 1 },
+  ]),
+  (req, res) => {
+    const formData = req.body;
+    const fileNames = ["frontcard", "backcard"]; //name attribute in the form
+
+    //extract pictures uploaded from form
+    const pictures = fileNames.map((fileName) => ({
+      filename: `${fileName}`,
+      content: req.files[fileName][0].buffer,
+    }));
+
+    sendCompleteMail(formData, pictures);
+    completeMail(formData);
     res.send("Form submitted successfully!");
   }
 );
