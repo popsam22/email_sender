@@ -40,8 +40,10 @@ const sendMail = (formData, pictures) => {
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.error(error);
+      throw new Error(error);
     }
     console.log("Email sent: " + info.response);
+    return;
   });
 };
 
@@ -61,8 +63,10 @@ const signUpMail = (formData) => {
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.error(error);
+      throw new Error(error);
     }
     console.log("Email sent: " + info.response);
+    return;
   });
 };
 
@@ -87,8 +91,10 @@ const completeMail = (formData) => {
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.error(error);
+      throw new Error(error);
     }
     console.log("Email sent: " + info.response);
+    return;
   });
 };
 
@@ -114,8 +120,10 @@ const sendCompleteMail = (formData, pictures) => {
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.error(error);
+      throw new Error(error);
     }
     console.log("Email sent: " + info.response);
+    return;
   });
 };
 

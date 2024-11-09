@@ -33,9 +33,18 @@ app.post(
       content: req.files[fileName][0].buffer,
     }));
 
-    sendMail(formData, pictures);
-    signUpMail(formData);
-    res.send("Form submitted successfully!");
+    try {
+      sendMail(formData, pictures);
+      signUpMail(formData);
+      res.status(200).json({
+        message: "Form submitted successfully!",
+        success: true,
+        data: req.body,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ success: false, message: error.message });
+    }
   }
 );
 
@@ -63,9 +72,18 @@ app.post(
       content: req.files[fileName][0].buffer,
     }));
 
-    sendCompleteMail(formData, pictures);
-    completeMail(formData);
-    res.send("Form submitted successfully!");
+    try {
+      sendCompleteMail(formData, pictures);
+      completeMail(formData);
+      res.status(200).json({
+        message: "Form submitted successfully!",
+        success: true,
+        data: req.body,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ success: false, message: error.message });
+    }
   }
 );
 
